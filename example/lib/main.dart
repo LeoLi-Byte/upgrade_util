@@ -1,210 +1,58 @@
-import 'dart:io';
+import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:upgrade_util/upgrade_util.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-/// Program entry.
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: HomePage(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
+  State<MyApp> createState() => _MyAppState();
 }
 
-/// Home
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class _MyAppState extends State<MyApp> {
+  String _platformVersion = 'Unknown';
+  final UpgradeUtil _upgradeUtilPlugin = UpgradeUtil();
 
   @override
-  State<HomePage> createState() => _HomePageState();
-}
+  void initState() {
+    super.initState();
+    initPlatformState();
+  }
 
-class _HomePageState extends State<HomePage> {
-  /// The app number of WeChat.
-  final String wechatAppleID = '414478124';
+  // Platform messages are asynchronous, so we initialize in an async method.
+  Future<void> initPlatformState() async {
+    String platformVersion;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    // We also handle the message potentially returning null.
+    try {
+      platformVersion = await _upgradeUtilPlugin.getPlatformVersion() ?? 'Unknown platform version';
+    } on PlatformException {
+      platformVersion = 'Failed to get platform version.';
+    }
 
-  /// The package name of WeChat.
-  final String wechatPackageName = 'com.tencent.mm';
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      _platformVersion = platformVersion;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    Widget child = Center(
-      child: Text('不支持【 $operatingSystem 】平台'),
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: const Text('Plugin example app')),
+        body: Center(child: Text('Running on: $_platformVersion\n')),
+      ),
     );
-
-    if (defaultTargetPlatform == TargetPlatform.iOS ||
-        defaultTargetPlatform == TargetPlatform.android) {
-      List<Widget> children = <Widget>[];
-
-      if (defaultTargetPlatform == TargetPlatform.iOS) {
-        children = _buildIOSBody;
-      } else if (defaultTargetPlatform == TargetPlatform.android) {
-        children = _buildAndroidBody;
-      }
-
-      child = SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16)
-            .add(EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom)),
-        child: Column(
-          children: children.map((Widget child) {
-            return Container(
-              width: double.infinity,
-              margin: const EdgeInsets.only(bottom: 10),
-              child: child,
-            );
-          }).toList(),
-        ),
-      );
-    }
-
-    return Scaffold(
-      appBar: AppBar(title: const Text('App Upgrade Example')),
-      body: child,
-    );
-  }
-
-  /// iOS body.
-  List<Widget> get _buildIOSBody {
-    Future<void> onPressed(IOSUpgradeOption option) async {
-      await UpgradeUtil.openStore(iOSOption: option);
-    }
-
-    return <Widget>[
-      ElevatedButton(
-        onPressed: () async => onPressed(
-          IOSUpgradeOption(appleId: wechatAppleID, mode: IOSOpenMode.product),
-        ),
-        child: const Text('Open Product Page.'),
-      ),
-      ElevatedButton(
-        onPressed: () async => onPressed(
-          IOSUpgradeOption(appleId: wechatAppleID, mode: IOSOpenMode.reviews),
-        ),
-        child: const Text('Open Reviews Page'),
-      ),
-      ElevatedButton(
-        onPressed: () async => onPressed(
-          IOSUpgradeOption(
-            appleId: wechatAppleID,
-            mode: IOSOpenMode.writeReview,
-          ),
-        ),
-        child: const Text('Open Reviews Page, and Write review.'),
-      ),
-    ];
-  }
-
-  /// Android body.
-  List<Widget> get _buildAndroidBody {
-    return <Widget>[
-      ElevatedButton(
-        onPressed: () async => UpgradeUtil.openStore(
-          androidOption: AndroidUpgradeOption(
-            brand: AndroidBrand.google,
-            packageName: wechatPackageName,
-          ),
-        ),
-        child: const Text('Google'),
-      ),
-      ElevatedButton(
-        onPressed: () async => UpgradeUtil.openStore(
-          androidOption: AndroidUpgradeOption(
-            brand: AndroidBrand.huawei,
-            packageName: wechatPackageName,
-          ),
-        ),
-        child: const Text('华为'),
-      ),
-      ElevatedButton(
-        onPressed: () async => UpgradeUtil.openStore(
-          androidOption: AndroidUpgradeOption(
-            brand: AndroidBrand.xiaomi,
-            packageName: wechatPackageName,
-          ),
-        ),
-        child: const Text('小米'),
-      ),
-      ElevatedButton(
-        onPressed: () async => UpgradeUtil.openStore(
-          androidOption: AndroidUpgradeOption(
-            brand: AndroidBrand.oppo,
-            packageName: wechatPackageName,
-            parameters: <String, dynamic>{'caller': wechatPackageName},
-          ),
-        ),
-        child: const Text('OPPO'),
-      ),
-      ElevatedButton(
-        onPressed: () async => UpgradeUtil.openStore(
-          androidOption: AndroidUpgradeOption(
-            brand: AndroidBrand.vivo,
-            packageName: wechatPackageName,
-            parameters: <String, dynamic>{
-              'th_name': 'self_update',
-              'th_update_delay': '1',
-            },
-          ),
-        ),
-        child: const Text('vivo'),
-      ),
-      ElevatedButton(
-        onPressed: () async => UpgradeUtil.openStore(
-          androidOption: AndroidUpgradeOption(
-            brand: AndroidBrand.honor,
-            packageName: wechatPackageName,
-          ),
-        ),
-        child: const Text('荣耀'),
-      ),
-      ElevatedButton(
-        onPressed: () async => UpgradeUtil.openStore(
-          androidOption: AndroidUpgradeOption(
-            brand: AndroidBrand.meizu,
-            packageName: wechatPackageName,
-          ),
-        ),
-        child: const Text('魅族'),
-      ),
-      ElevatedButton(
-        onPressed: () async => UpgradeUtil.openStore(
-          androidOption: AndroidUpgradeOption(
-            brand: AndroidBrand.tencent,
-            packageName: wechatPackageName,
-          ),
-        ),
-        child: const Text('应用宝'),
-      ),
-    ];
-  }
-
-  /// Operating system description
-  static String get operatingSystem {
-    if (Platform.isAndroid) {
-      return 'Android';
-    } else if (Platform.isIOS) {
-      return 'iOS';
-    } else if (Platform.isWindows) {
-      return 'Windows';
-    } else if (Platform.isMacOS) {
-      return 'macOS';
-    } else if (Platform.isLinux) {
-      return 'Linux';
-    } else if (Platform.isFuchsia) {
-      return 'Fuchsia OS';
-    } else if (kIsWeb) {
-      return 'Web';
-    }
-
-    return '';
   }
 }

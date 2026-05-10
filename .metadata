@@ -4,7 +4,7 @@
 # This file should be version controlled and should not be manually edited.
 
 version:
-  revision: "dec2ee5c1f98f8e84a7d5380c05eb8a3d0a81668"
+  revision: "c6f67dede3d4aa1aa7a69dd56a3494a5cde6cc80"
   channel: "stable"
 
 project_type: plugin
@@ -13,14 +13,14 @@ project_type: plugin
 migration:
   platforms:
     - platform: root
-      create_revision: dec2ee5c1f98f8e84a7d5380c05eb8a3d0a81668
-      base_revision: dec2ee5c1f98f8e84a7d5380c05eb8a3d0a81668
+      create_revision: c6f67dede3d4aa1aa7a69dd56a3494a5cde6cc80
+      base_revision: c6f67dede3d4aa1aa7a69dd56a3494a5cde6cc80
     - platform: android
-      create_revision: dec2ee5c1f98f8e84a7d5380c05eb8a3d0a81668
-      base_revision: dec2ee5c1f98f8e84a7d5380c05eb8a3d0a81668
+      create_revision: c6f67dede3d4aa1aa7a69dd56a3494a5cde6cc80
+      base_revision: c6f67dede3d4aa1aa7a69dd56a3494a5cde6cc80
     - platform: ios
-      create_revision: dec2ee5c1f98f8e84a7d5380c05eb8a3d0a81668
-      base_revision: dec2ee5c1f98f8e84a7d5380c05eb8a3d0a81668
+      create_revision: c6f67dede3d4aa1aa7a69dd56a3494a5cde6cc80
+      base_revision: c6f67dede3d4aa1aa7a69dd56a3494a5cde6cc80
 
   # User provided section
 
