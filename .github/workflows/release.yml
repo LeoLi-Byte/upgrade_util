@@ -1,0 +1,26 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "[0-9]+.[0-9]+.[0-9]+*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract changelog section
+        run: |
+          VERSION="${GITHUB_REF_NAME}"
+          awk "/^## +\\[?${VERSION//./\\.}\\]?/{flag=1; next} /^## /{flag=0} flag" CHANGELOG.md > notes.md
+          [ -s notes.md ] || echo "Release ${VERSION}" > notes.md
+
+      - name: Create GitHub Release
+        run: gh release create "${GITHUB_REF_NAME}" --title "${GITHUB_REF_NAME}" --notes-file notes.md --generate-notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

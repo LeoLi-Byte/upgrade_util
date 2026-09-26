@@ -5,13 +5,13 @@
 Pod::Spec.new do |s|
   s.name             = 'upgrade_util'
   s.version          = '0.0.1'
-  s.summary          = 'A plug-in for application upgrades, which implements the method of jumping to the store and the function of installing after downloading the APK.'
+  s.summary          = 'An in-app update plugin that supports redirecting to app stores for updates, previewing reviews, and writing reviews.'
   s.description      = <<-DESC
-A plug-in for application upgrades, which implements the method of jumping to the store and the function of installing after downloading the APK.
+An in-app update plugin that supports redirecting to app stores for updates, previewing reviews, and writing reviews.
                        DESC
-  s.homepage         = 'https://github.com/LiWenHui96'
+  s.homepage         = 'https://github.com/LeoLi-Byte'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'LiWeNHuI' => 'sdgrlwh@163.com' }
+  s.author           = { 'LeoLi-Byte' => 'sdgrlwh@163.com' }
   s.source           = { :path => '.' }
   s.source_files = 'upgrade_util/Sources/upgrade_util/**/*'
   s.dependency 'Flutter'

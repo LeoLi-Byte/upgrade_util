@@ -9,8 +9,6 @@
 #
 #   - analysis_options.yaml (this file)
 #   - https://github.com/flutter/flutter/blob/main/analysis_options.yaml
-#   - https://github.com/flutter/plugins/blob/main/analysis_options.yaml
-#   - https://github.com/flutter/engine/blob/main/analysis_options.yaml
 #   - https://github.com/flutter/packages/blob/main/analysis_options.yaml
 #
 # This file contains the analysis options used for code in the flutter/flutter
@@ -21,11 +19,14 @@ analyzer:
     strict-casts: true
     strict-inference: true
   errors:
-    deprecated_member_use_from_same_package: info
-    invalid_annotation_target: ignore
+    constant_identifier_names: ignore
+    deprecated_member_use: warning
+    deprecated_member_use_from_same_package: warning
     missing_required_param: error
     missing_return: error
-    unnecessary_import: warning
+    private_optional_parameter: ignore
+    unnecessary_null_comparison: ignore
+    unused_element_parameter: ignore
 
 # This file configures the analyzer, which statically analyzes Dart code to
 # check for errors, warnings, and lints.
@@ -68,7 +69,6 @@ linter:
     - avoid_implementing_value_types
     - avoid_js_rounded_ints
     - avoid_multiple_declarations_per_line
-    - avoid_null_checks_in_equality_operators
     # - avoid_positional_boolean_parameters # would have been nice to enable this but by now there's too many places that break it
     - avoid_private_typedef_functions
     # - avoid_redundant_argument_values # 需要补全所需的参数配置，预防后期的变更不可知
@@ -148,7 +148,6 @@ linter:
     - use_colored_box
     - use_decorated_box
     - use_enums
-    - use_if_null_to_convert_nulls_to_bools
     - use_is_even_rather_than_modulo
     - use_late_for_private_fields_and_variables
     - use_named_constants

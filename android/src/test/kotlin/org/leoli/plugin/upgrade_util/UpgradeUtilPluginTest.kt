@@ -1,4 +1,4 @@
-package io.upgrade
+package org.leoli.plugin.upgrade_util
 
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel

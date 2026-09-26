@@ -1,11 +1,9 @@
 import Flutter
 import UIKit
 
-let channelName = "upgrade_util.io.channel/method"
-
 public class UpgradeUtilPlugin: NSObject, FlutterPlugin {
   public static func register(with registrar: FlutterPluginRegistrar) {
-    let channel = FlutterMethodChannel(name: channelName, binaryMessenger: registrar.messenger())
+    let channel = FlutterMethodChannel(name: "upgrade_util", binaryMessenger: registrar.messenger())
     let instance = UpgradeUtilPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
   }

@@ -1,4 +1,4 @@
-package io.upgrade
+package org.leoli.plugin.upgrade_util
 
 import android.os.Build
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -16,7 +16,7 @@ class UpgradeUtilPlugin : FlutterPlugin, MethodCallHandler {
     private lateinit var channel: MethodChannel
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-        channel = MethodChannel(flutterPluginBinding.binaryMessenger, CHANNEL_NAME)
+        channel = MethodChannel(flutterPluginBinding.binaryMessenger, "upgrade_util")
         channel.setMethodCallHandler(this)
     }
 
@@ -29,9 +29,5 @@ class UpgradeUtilPlugin : FlutterPlugin, MethodCallHandler {
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
-    }
-
-    companion object {
-        private const val CHANNEL_NAME = "upgrade_util.io.channel/method"
     }
 }

@@ -1,6 +1,4 @@
-import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-
-import 'upgrade_util_method_channel.dart';
+part of 'upgrade_util.dart';
 
 abstract class UpgradeUtilPlatform extends PlatformInterface {
   /// Constructs a UpgradeUtilPlatform.

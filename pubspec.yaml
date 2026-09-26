@@ -1,19 +1,18 @@
 name: upgrade_util
-description: "A plug-in for application upgrades, which implements the method of jumping to the store and the function of installing after downloading the APK."
+description: "An in-app update plugin that supports redirecting to app stores for updates, previewing reviews, and writing reviews."
 version: 3.1.0
-homepage: https://github.com/LiWenHui96/
-repository: https://github.com/LiWenHui96/upgrade_util/
-issue_tracker: https://github.com/LiWenHui96/upgrade_util/issues/
+homepage: https://github.com/LeoLi-Byte/
+repository: https://github.com/LeoLi-Byte/upgrade_util/
+issue_tracker: https://github.com/LeoLi-Byte/upgrade_util/issues/
 
 environment:
-  sdk: ^3.12.0
-  flutter: '>=3.44.0'
+  sdk: ^3.11.0
+  flutter: '>=3.41.0'
 
 dependencies:
   flutter:
     sdk: flutter
   plugin_platform_interface: ^2.1.8
-  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_lints: ^6.0.0
@@ -24,7 +23,7 @@ flutter:
   plugin:
     platforms:
       android:
-        package: io.upgrade
+        package: org.leoli.plugin.upgrade_util
         pluginClass: UpgradeUtilPlugin
       ios:
         pluginClass: UpgradeUtilPlugin

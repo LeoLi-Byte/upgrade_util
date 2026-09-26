@@ -6,20 +6,16 @@ import PackageDescription
 let package = Package(
     name: "upgrade_util",
     platforms: [
-        .iOS("13.0")
+        .iOS("15.0")
     ],
     products: [
         .library(name: "upgrade-util", targets: ["upgrade_util"])
     ],
-    dependencies: [
-        .package(name: "FlutterFramework", path: "../FlutterFramework")
-    ],
+    dependencies: [],
     targets: [
         .target(
             name: "upgrade_util",
-            dependencies: [
-                .product(name: "FlutterFramework", package: "FlutterFramework")
-            ],
+            dependencies: [],
             resources: [
                 // If your plugin requires a privacy manifest, for example if it uses any required
                 // reason APIs, update the PrivacyInfo.xcprivacy file to describe your plugin's
