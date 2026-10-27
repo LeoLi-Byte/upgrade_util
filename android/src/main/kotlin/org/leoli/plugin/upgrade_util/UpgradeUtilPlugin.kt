@@ -87,16 +87,22 @@ class UpgradeUtilPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     /**
      * 打开指定链接
      *
-     * [AppMarkets.requireActivityResult] 中的市场对隐式唤起有限制，
+     * 唤起前先以 [canLaunch] 探测链接是否可被处理，不可处理时直接返回 false。
+     *
+     * [AppMarkets.requireActivityResult] 中的市场（OPPO 系）对隐式唤起有限制，
      * 需借助前台 Activity 以 `startActivityForResult` 打开，否则静默失败；
      * 无前台 Activity 时退化为普通唤起。
      *
+     * @param url 目标链接。
      * @param targetPackage 显式指定的目标包名（厂商应用市场），null 时由系统分发。
      * @return 是否成功发起跳转，不含用户在市场内的后续操作。
      */
     private fun openUrl(url: String, targetPackage: String? = null): Boolean {
         return try {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).setPackage(targetPackage)
+            if (!canLaunch(intent)) {
+                return false
+            }
             val foreground = activity
             if (targetPackage in AppMarkets.requireActivityResult && foreground != null) {
                 foreground.startActivityForResult(intent, REQUEST_CODE_MARKET)
@@ -108,6 +114,18 @@ class UpgradeUtilPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         } catch (e: ActivityNotFoundException) {
             false
         }
+    }
+
+    /**
+     * 判断 [intent] 是否存在可处理的组件。
+     *
+     * 包可见性（Android 11+）：显式包名的目标市场已在 manifest 的 `<queries>` 中声明；
+     * 未指定包名的 `market://` 协议依赖 `<queries>` 中的 intent 声明获得可见性。
+     * 模拟器无市场时系统兜底为 [FALLBACK_COMPONENT]，视为不可跳转。
+     */
+    private fun canLaunch(intent: Intent): Boolean {
+        val componentName = intent.resolveActivity(context.packageManager) ?: return false
+        return componentName.toShortString() != FALLBACK_COMPONENT
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
@@ -133,5 +151,8 @@ class UpgradeUtilPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     companion object {
         /** 以 [Activity.startActivityForResult] 唤起应用市场时的请求码。 */
         private const val REQUEST_CODE_MARKET = 100
+
+        /** 模拟器无应用市场时系统用于兜底的组件，`resolveActivity` 命中它视为不可跳转。 */
+        private const val FALLBACK_COMPONENT = "{com.android.fallback/com.android.fallback.Fallback}"
     }
 }

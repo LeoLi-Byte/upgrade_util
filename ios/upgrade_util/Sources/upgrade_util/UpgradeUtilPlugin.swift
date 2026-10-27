@@ -18,6 +18,8 @@ public class UpgradeUtilPlugin: NSObject, FlutterPlugin {
   }
 
   /// 打开链接
+  ///
+  /// 唤起前先以 `canOpenURL` 探测链接是否可被处理，不可处理时直接返回 false。
   private func launch(_ args: [String: Any]?, result: @escaping FlutterResult) {
     guard let urlString = args?["url"] as? String, let url = URL(string: urlString) else {
       result(
@@ -27,6 +29,10 @@ public class UpgradeUtilPlugin: NSObject, FlutterPlugin {
           details: nil
         )
       )
+      return
+    }
+    guard UIApplication.shared.canOpenURL(url) else {
+      result(false)
       return
     }
     UIApplication.shared.open(url, options: [:]) { success in result(success) }

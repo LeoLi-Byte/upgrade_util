@@ -1,5 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.leoli.plugin.upgrade_util">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Android 11+ 包可见性声明，用于检测各厂商应用市场是否安装 -->
     <queries>
