@@ -1,3 +1,9 @@
+## 4.0.1
+
+* Both platforms: check whether the target link can be handled before launching (`resolveActivity` on Android, `canOpenURL` on iOS); `launch` now returns `false` without attempting a jump when no handler exists.
+* Android: the system fallback component on emulators counts as "no handler".
+* Android: remove the deprecated `package` attribute from the plugin manifest, which is superseded by the `namespace` DSL.
+
 ## 4.0.0
 
 * Add `UpgradeUtil.launch` with `UpgradeOpenType`: jump to the app store detail page, the review list page, or the write-review page, and return whether the jump was successfully initiated.
