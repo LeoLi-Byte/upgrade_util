@@ -71,7 +71,7 @@ final bool opened = await UpgradeUtil.launch(
 
 > Android 端调用会在发起平台调用前抛出 `UnsupportedError`。
 
-返回的 `bool` 表示是否成功发起跳转：iOS 端由系统回调给出；Android 端以能否唤起目标页面为准，不含用户在市场内的后续操作。
+返回的 `bool` 表示是否成功发起跳转：两端都会先预检链接是否可被处理，不可处理时直接返回 `false` 且不发起跳转；iOS 端最终结果由系统回调给出，Android 端仅以成功发起跳转为准，不含用户在市场内的后续操作。
 
 ## 参数说明
 
@@ -99,6 +99,7 @@ final bool opened = await UpgradeUtil.launch(
 
 ## 注意事项
 
+- **唤起前预检**：跳转前两端都会先校验链接是否可被处理——若没有任何应用市场或 App Store 能打开，`launch` 直接返回 `false`，不发起跳转（Android 模拟器上系统的兜底组件同样视为「不可跳转」）。插件自带的 manifest 已声明所需的 Android 包可见性（`<queries>`），宿主 App 无需额外配置。
 - **Android 市场检测**：按优先级依次匹配已安装的厂商市场——华为、荣耀、小米、OPPO、vivo、魅族、三星——首个已安装的市场生效；未收录品牌协议的市场使用 `market://` 通用协议唤起。
 - **评论深链限制（Android）**：OPPO（含 realme、一加）、vivo、荣耀（市场 versionCode ≥ 160036301）支持写评论深链；其他市场 `review` 回退至详情页。
 - **示例工程**：完整示例见 [example/lib/main.dart](example/lib/main.dart)。

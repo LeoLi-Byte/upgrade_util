@@ -76,9 +76,10 @@ final bool opened = await UpgradeUtil.launch(
 
 > Throws `UnsupportedError` on Android before any platform call.
 
-The returned `bool` indicates whether the jump was successfully initiated: on iOS the value comes
-from the system callback; on Android it only indicates that the target page could be opened, and
-does not cover the user's subsequent actions in the market.
+The returned `bool` indicates whether the jump was successfully initiated: both platforms
+pre-check that the link can be handled and return `false` without jumping otherwise; on iOS
+the final value comes from the system callback, while on Android it only covers initiating
+the jump and does not include the user's subsequent actions in the market.
 
 ## Parameters
 
@@ -106,6 +107,11 @@ does not cover the user's subsequent actions in the market.
 
 ## Notes
 
+- **Pre-launch check**: before launching, both platforms verify that the target link can be
+  handled — if no app market or the App Store can open it, `launch` returns `false` without
+  attempting a jump (on Android emulators, the system's fallback component counts as "no
+  handler"). The plugin's bundled manifest already declares the required Android package
+  visibility (`<queries>`), so no host-app configuration is needed.
 - **Android market detection**: the installed vendor market is matched in priority order —
   Huawei, Honor, Xiaomi, OPPO, vivo, Meizu, Samsung — and the first installed one wins; unlisted
   markets are launched with the generic `market://` protocol.
